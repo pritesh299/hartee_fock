@@ -1,5 +1,8 @@
-use serde::Deserialize;
 
+mod basis;
+
+use serde::Deserialize;
+use basis::build_basis;
 #[derive(Deserialize)]
 pub struct Atom {
     pub element: String,
@@ -29,7 +32,7 @@ fn main() {
        
     let json = std::fs::read_to_string("input.json").unwrap();
     let config: InputConfig = serde_json::from_str(&json).unwrap();
-    println!("Molecule charge: {}", config.molecule.charge);
 
-    
-}
+    let basis = build_basis(config.molecule.atoms, config.basis);
+
+}   

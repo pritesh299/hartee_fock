@@ -6,7 +6,7 @@
       { "element": "H", "position": [0.0, 0.0, 0.74] }
     ]
   },
-  "basis": "sto-3g",
+  "basis": "gto",
   "scf": {
     "max_iter": 50,
     "tol": 1e-6
