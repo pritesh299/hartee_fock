@@ -1,6 +1,7 @@
 
 mod basis;
 mod integrals;
+mod scf;
 
 use serde::Deserialize;
 use basis::build_basis;
@@ -34,11 +35,12 @@ fn main() {
     let json = std::fs::read_to_string("input.json").unwrap();
     let config: InputConfig = serde_json::from_str(&json).unwrap();
 
-    let basis = build_basis(config.molecule.atoms, config.basis);
+    let basis = build_basis(&config.molecule.atoms, &config.basis);
 
     let overlap_matrix = integrals::compute_overlap_matrix(&basis);
-    println!("Overlap Matrix:");
-    for row in overlap_matrix {
-        println!("{:?}", row); 
-    }
-}   
+    let kinetic_matrix = integrals::compute_kinetic_matrix(&basis);
+    let nuclear_attraction_matrix = integrals::compute_nuclear_attraction_matrix(&basis, &config.molecule.atoms);
+    let eri_tensor = integrals::compute_eri_tensor(&basis);
+    let Hcore_matrix = integrals::Hcore_matrix(basis.len(), &kinetic_matrix, &nuclear_attraction_matrix);
+    let fock_matrix = scf::run_scf(&overlap_matrix, &Hcore_matrix, &eri_tensor, &config.molecule.atoms, config.molecule.atoms.len(), config.scf.max_iter, config.scf.tol);
+}
