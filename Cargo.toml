@@ -1,0 +1,11 @@
+[package]
+name = "hartee_fock"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+ndarray = "0.15"
+ndarray-linalg = { version = "0.16", features = ["openblas"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+reqwest = { version = "0.11", features = ["json", "blocking"] } # Only if fetching from a URL

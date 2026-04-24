@@ -1,0 +1,11 @@
+/home/pritesh/hartee_fock/target/debug/deps/libopenblas_build-93f3a48826a31e5b.rmeta: /home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/lib.rs /home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/build.rs /home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/check.rs /home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/download.rs /home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/error.rs
+
+/home/pritesh/hartee_fock/target/debug/deps/libopenblas_build-93f3a48826a31e5b.rlib: /home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/lib.rs /home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/build.rs /home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/check.rs /home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/download.rs /home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/error.rs
+
+/home/pritesh/hartee_fock/target/debug/deps/openblas_build-93f3a48826a31e5b.d: /home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/lib.rs /home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/build.rs /home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/check.rs /home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/download.rs /home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/error.rs
+
+/home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/lib.rs:
+/home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/build.rs:
+/home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/check.rs:
+/home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/download.rs:
+/home/pritesh/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/openblas-build-0.10.15/src/error.rs:
