@@ -22,9 +22,7 @@ fn mat_mul(a: &Array2<f64>, b: &Array2<f64>) -> Array2<f64> {
     a.dot(b)
 }
 
-// ─────────────────────────────────────────────
 // S^{-1/2}
-// ─────────────────────────────────────────────
 
 fn s_invsqrt(s: &[Vec<f64>]) -> Array2<f64> {
     let s_arr = vec_to_array(s);
@@ -41,9 +39,7 @@ fn s_invsqrt(s: &[Vec<f64>]) -> Array2<f64> {
     evecs.dot(&d).dot(&evecs.t())
 }
 
-// ─────────────────────────────────────────────
 // Density matrix (supports odd electrons)
-// ─────────────────────────────────────────────
 
 fn density_matrix(c: &Array2<f64>, n_elec: usize) -> Array2<f64> {
     let (n, _) = c.dim();
@@ -72,9 +68,7 @@ fn density_matrix(c: &Array2<f64>, n_elec: usize) -> Array2<f64> {
     d
 }
 
-// ─────────────────────────────────────────────
 // Fock matrix
-// ─────────────────────────────────────────────
 
 fn fock_matrix(h: &Array2<f64>, d: &Array2<f64>, eri: &[f64]) -> Array2<f64> {
     let n = h.dim().0;
@@ -100,9 +94,7 @@ fn fock_matrix(h: &Array2<f64>, d: &Array2<f64>, eri: &[f64]) -> Array2<f64> {
     f
 }
 
-// ─────────────────────────────────────────────
 // Energy
-// ─────────────────────────────────────────────
 
 fn electronic_energy(d: &Array2<f64>, h: &Array2<f64>, f: &Array2<f64>) -> f64 {
     let n = d.dim().0;
@@ -117,9 +109,7 @@ fn electronic_energy(d: &Array2<f64>, h: &Array2<f64>, f: &Array2<f64>) -> f64 {
     0.5 * e
 }
 
-// ─────────────────────────────────────────────
 // Nuclear repulsion
-// ─────────────────────────────────────────────
 
 pub fn nuclear_repulsion(nuclei: &[([f64; 3], f64)]) -> f64 {
     let mut e = 0.0;
@@ -138,9 +128,7 @@ pub fn nuclear_repulsion(nuclei: &[([f64; 3], f64)]) -> f64 {
     e
 }
 
-// ─────────────────────────────────────────────
 // SCF
-// ─────────────────────────────────────────────
 
 pub fn run_scf(
     s: &[Vec<f64>],
