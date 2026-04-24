@@ -11,16 +11,6 @@ fn vec_to_array(v: &[Vec<f64>]) -> Array2<f64> {
     Array2::from_shape_vec((n, n), v.iter().flatten().cloned().collect()).unwrap()
 }
 
-fn array_to_vec(a: &Array2<f64>) -> Vec<Vec<f64>> {
-    let (n, _) = a.dim();
-    (0..n)
-        .map(|i| (0..n).map(|j| a[[i, j]]).collect())
-        .collect()
-}
-
-fn mat_mul(a: &Array2<f64>, b: &Array2<f64>) -> Array2<f64> {
-    a.dot(b)
-}
 
 // S^{-1/2}
 
@@ -152,7 +142,6 @@ pub fn run_scf(
     let n = s.len();
 
     let s_inv = s_invsqrt(s);
-    let s_arr = vec_to_array(s);
     let h_arr = vec_to_array(h);
 
     let mut d = Array2::<f64>::zeros((n, n));
@@ -165,7 +154,7 @@ pub fn run_scf(
 
         let f_prime = s_inv.t().dot(&f).dot(&s_inv);
 
-        let (eps, c_prime) = f_prime.eigh(UPLO::Upper).unwrap();
+        let (_eps, c_prime) = f_prime.eigh(UPLO::Upper).unwrap();
 
         let c = s_inv.dot(&c_prime);
 

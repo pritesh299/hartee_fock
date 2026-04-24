@@ -7,7 +7,6 @@ pub struct Gaussian {
 }
 
 pub struct ContractedGaussian {
-    pub center: [f64; 3],
     pub primitives: Vec<Gaussian>
 }
 
@@ -37,7 +36,7 @@ pub fn build_basis(atoms: &[Atom], basis_name: &str) -> Vec<ContractedGaussian> 
                 norm: normalization(alpha),
             })
             .collect();
-        let  contracted_gaussian = ContractedGaussian { center, primitives };
+        let  contracted_gaussian = ContractedGaussian { primitives };
         
         basis.push(contracted_gaussian);
         }

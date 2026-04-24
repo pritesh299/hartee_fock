@@ -109,37 +109,37 @@ fn compute_kinetic_primitive(phi_1: &Gaussian, phi_2: &Gaussian) -> f64 {
 
 // contracted kinetic energy 
 pub fn compute_kinetic(psi_1: &ContractedGaussian, psi_2: &ContractedGaussian) -> f64 {
-    let mut T_ij = 0.0;
+    let mut t_ij = 0.0;
 
     for phi_i in &psi_1.primitives {
         for phi_j in &psi_2.primitives {
-            T_ij += compute_kinetic_primitive(phi_i, phi_j);
+            t_ij += compute_kinetic_primitive(phi_i, phi_j);
         }
     }
-    T_ij
+    t_ij
 }
 
 // kinetic matrix T_ij = <psi_i | -1/2 ∇^2 | psi_j>
 pub fn compute_kinetic_matrix(basis: &[ContractedGaussian]) -> Vec<Vec<f64>> {
     let n = basis.len();
-    let mut T = vec![vec![0.0; n]; n];
+    let mut t = vec![vec![0.0; n]; n];
 
     for i in 0..n {
         for j in 0..=i {
             let val = compute_kinetic(&basis[i], &basis[j]);
-            T[i][j] = val;
-            T[j][i] = val;//symmetry
+            t[i][j] = val;
+            t[j][i] = val;//symmetry
         }
     }
-    T
+    t
 }
 
 // primitive nuclear attraction
 fn compute_nuclear_attraction_primitive(
     phi_1: &Gaussian,
     phi_2: &Gaussian,
-    R_k: [f64; 3],
-    Z_k: f64,
+    r_k: [f64; 3],
+    z_k: f64,
 ) -> f64 {
     let ai = phi_1.exponent;
     let aj = phi_2.exponent;
@@ -147,9 +147,9 @@ fn compute_nuclear_attraction_primitive(
     let (ap, rp) = product(ai, phi_1.center, aj, phi_2.center);
 
     let rij2 = dist2(phi_1.center, phi_2.center);
-    let rpc2 = dist2(rp, R_k);
+    let rpc2 = dist2(rp, r_k);
 
-    let prefac = -Z_k * 2.0 * PI / ap;
+    let prefac = -z_k * 2.0 * PI / ap;
     let decay  = (-ai * aj / ap * rij2).exp();
 
     phi_1.norm * phi_2.norm * phi_1.coefficient * phi_2.coefficient
@@ -165,12 +165,12 @@ pub fn compute_nuclear_attraction(
 ) -> f64 {
     let mut v = 0.0;
 
-    for &(R_k, Z_k) in nuclei {
+    for &(r_k, z_k) in nuclei {
         let mut v_ij = 0.0;
 
         for phi_i in &psi_i.primitives {
             for phi_j in &psi_j.primitives {
-                v_ij += compute_nuclear_attraction_primitive(phi_i, phi_j, R_k, Z_k);
+                v_ij += compute_nuclear_attraction_primitive(phi_i, phi_j, r_k, z_k);
             }
         }
         v += v_ij;
@@ -279,19 +279,19 @@ pub fn compute_eri_tensor(basis: &[ContractedGaussian]) -> Vec<f64> {
 }
 
 // H_core = T + V
-pub fn Hcore_matrix(
+pub fn hcore_matrix(
     basis_length: usize,
     kinetic: &[Vec<f64>],
     nuclear: &[Vec<f64>],
 ) -> Vec<Vec<f64>> {
     let n = basis_length;
-    let mut H = vec![vec![0.0; n]; n];
+    let mut h = vec![vec![0.0; n]; n];
 
     for i in 0..n {
         for j in 0..n {
-            H[i][j] = kinetic[i][j] + nuclear[i][j];
+            h[i][j] = kinetic[i][j] + nuclear[i][j];
         }
     }
 
-    H   
+    h   
 }

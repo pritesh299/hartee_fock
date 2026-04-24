@@ -41,6 +41,7 @@ fn main() {
     let kinetic_matrix = integrals::compute_kinetic_matrix(&basis);
     let nuclear_attraction_matrix = integrals::compute_nuclear_attraction_matrix(&basis, &config.molecule.atoms);
     let eri_tensor = integrals::compute_eri_tensor(&basis);
-    let Hcore_matrix = integrals::Hcore_matrix(basis.len(), &kinetic_matrix, &nuclear_attraction_matrix);
-    let fock_matrix = scf::run_scf(&overlap_matrix, &Hcore_matrix, &eri_tensor, &config.molecule.atoms, config.molecule.atoms.len(), config.scf.max_iter, config.scf.tol);
+    let hcore_matrix = integrals::hcore_matrix(basis.len(), &kinetic_matrix, &nuclear_attraction_matrix);
+    
+    scf::run_scf(&overlap_matrix, &hcore_matrix, &eri_tensor, &config.molecule.atoms, config.molecule.atoms.len(), config.scf.max_iter, config.scf.tol);
 }
