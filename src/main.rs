@@ -1,5 +1,6 @@
 
 mod basis;
+mod integrals;
 
 use serde::Deserialize;
 use basis::build_basis;
@@ -35,4 +36,9 @@ fn main() {
 
     let basis = build_basis(config.molecule.atoms, config.basis);
 
+    let overlap_matrix = integrals::compute_overlap_matrix(&basis);
+    println!("Overlap Matrix:");
+    for row in overlap_matrix {
+        println!("{:?}", row); 
+    }
 }   
