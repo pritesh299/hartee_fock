@@ -36,9 +36,67 @@ Can make changes in input.json to run
   "scf": { "max_iter": 100, "tol": 1e-8 }
 }
 
+
 ```
 Then following
 
 ```bash
 cargo run 
+```
+
+Esle run 
+
+
+```bash 
+bash run_HF.sh
+```
+It will run a series of cases and resulting HF energies.
+
+expected output
+```bash 
+
+Running: H_atom | sto-1g
+E_total = -0.42441318157838764
+
+Running: He_atom | sto-1g
+E_total = -2.3009405882292153
+
+Running: H2_0.74A | sto-1g
+E_total = -0.9390654918031686
+
+Running: H2_1.5A | sto-1g
+E_total = -0.8776612394188507
+
+Running: H2_3.0A | sto-1g
+E_total = -0.6581200067100337
+
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+
+Running: H_atom | sto-6g
+E_total = -0.47103905417809255
+
+Running: He_atom | sto-6g
+E_total = -2.8462920947813606
+
+Running: H2_0.74A | sto-6g
+E_total = -1.1253721375239847
+
+Running: H2_1.5A | sto-6g
+E_total = -0.9189359504793427
+
+Running: H2_3.0A | sto-6g
+E_total = -0.6656565216167651
+
+Running: HeH_plus | sto-6g
+E_total = -2.8645967713698774
+
 ```
