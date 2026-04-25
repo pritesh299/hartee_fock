@@ -1,6 +1,6 @@
 # Hartree–Fock in Rust
 
-> 📄 For a detailed description of the implementation, see [Hartree–Fock-rust-implementation.pdf](Hartree–Fock-rust-implemntation.pdf).
+> 📄 For a detailed description of the implementation, see [Hartree–Fock-rust-implementation.pdf](Hartree–Fock-rust-implementation.pdf).
 
 A Rust implementation of the Restricted Hartree–Fock (RHF) method for small molecules.
 
