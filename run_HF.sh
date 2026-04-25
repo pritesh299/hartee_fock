@@ -4,94 +4,122 @@ set -e
 OUTPUT_FILE="results.csv"
 LOG_FILE="run.log"
 
-# reset files
-echo "case,E_total" > $OUTPUT_FILE
+echo "case,basis,E_total" > $OUTPUT_FILE
 echo "Hartree-Fock Test Run" > $LOG_FILE
+
+# -----------------------------
+# Basis sets
+# -----------------------------
+BASIS_LIST=("sto-1g" "sto-2g" "sto-3g" "sto-4g" "sto-5g" "sto-6g")
+
+# -----------------------------
+# Run function
+# -----------------------------
 run_case () {
     name=$1
-    json=$2
+    basis=$2
+    json=$3
 
-    echo "Running: $name"
+    echo "Running: $name | $basis"
 
     echo "$json" > input.json
 
-    # run and capture full output
     output=$(cargo run --quiet -- input.json)
 
-    # print full output to log
-    echo "$name " >> $LOG_FILE
+    echo "$name | $basis" >> $LOG_FILE
     echo "$output" >> $LOG_FILE
     echo "" >> $LOG_FILE
 
-    # extract energy
     energy=$(echo "$output" | grep "E_total" | awk '{print $3}')
 
     echo "E_total = $energy"
     echo ""
 
-    # write to CSV
-    echo "$name,$energy" >> $OUTPUT_FILE
+    echo "$name,$basis,$energy" >> $OUTPUT_FILE
 }
 
-# Hydrogen atom
-run_case "H atom" '{
-  "molecule": {
-    "charge": 0,
-    "atoms": [
-      { "element": "H", "position": [0.0, 0.0, 0.0] }
-    ]
-  },
-  "basis": "sto-3g",
-  "scf": { "max_iter": 50, "tol": 1e-6 }
-}'
+# -----------------------------
+# Systems
+# -----------------------------
 
-# Helium atom
-run_case "He atom" '{
-  "molecule": {
-    "charge": 0,
-    "atoms": [
-      { "element": "He", "position": [0.0, 0.0, 0.0] }
-    ]
-  },
-  "basis": "sto-3g",
-  "scf": { "max_iter": 50, "tol": 1e-6 }
-}'
+for basis in "${BASIS_LIST[@]}"; do
 
-# H2 molecule (0.74 Å)
-run_case "H2 (0.74 Å)" '{
-  "molecule": {
-    "charge": 0,
-    "atoms": [
-      { "element": "H", "position": [0.0, 0.0, 0.0] },
-      { "element": "H", "position": [0.0, 0.0, 0.74] }
-    ]
-  },
-  "basis": "sto-3g",
-  "scf": { "max_iter": 50, "tol": 1e-6 }
-}'
+    # H atom
+    run_case "H_atom" "$basis" "{
+      \"molecule\": {
+        \"charge\": 0,
+        \"atoms\": [
+          { \"element\": \"H\", \"position\": [0.0, 0.0, 0.0] }
+        ]
+      },
+      \"basis\": \"$basis\",
+      \"scf\": { \"max_iter\": 50, \"tol\": 1e-6 }
+    }"
 
-# H2 stretched (1.5 Å)
-run_case "H2 (1.5 Å)" '{
-  "molecule": {
-    "charge": 0,
-    "atoms": [
-      { "element": "H", "position": [0.0, 0.0, 0.0] },
-      { "element": "H", "position": [0.0, 0.0, 1.5] }
-    ]
-  },
-  "basis": "sto-3g",
-  "scf": { "max_iter": 50, "tol": 1e-6 }
-}'
+    # He atom
+    run_case "He_atom" "$basis" "{
+      \"molecule\": {
+        \"charge\": 0,
+        \"atoms\": [
+          { \"element\": \"He\", \"position\": [0.0, 0.0, 0.0] }
+        ]
+      },
+      \"basis\": \"$basis\",
+      \"scf\": { \"max_iter\": 50, \"tol\": 1e-6 }
+    }"
 
-# H2 very stretched (3.0 Å)
-run_case "H2 (3.0 Å)" '{
-  "molecule": {
-    "charge": 0,
-    "atoms": [
-      { "element": "H", "position": [0.0, 0.0, 0.0] },
-      { "element": "H", "position": [0.0, 0.0, 3.0] }
-    ]
-  },
-  "basis": "sto-3g",
-  "scf": { "max_iter": 50, "tol": 1e-6 }
-}'
+    # H2 equilibrium
+    run_case "H2_0.74A" "$basis" "{
+      \"molecule\": {
+        \"charge\": 0,
+        \"atoms\": [
+          { \"element\": \"H\", \"position\": [0.0, 0.0, 0.0] },
+          { \"element\": \"H\", \"position\": [0.0, 0.0, 0.74] }
+        ]
+      },
+      \"basis\": \"$basis\",
+      \"scf\": { \"max_iter\": 50, \"tol\": 1e-6 }
+    }"
+
+    # H2 stretched
+    run_case "H2_1.5A" "$basis" "{
+      \"molecule\": {
+        \"charge\": 0,
+        \"atoms\": [
+          { \"element\": \"H\", \"position\": [0.0, 0.0, 0.0] },
+          { \"element\": \"H\", \"position\": [0.0, 0.0, 1.5] }
+        ]
+      },
+      \"basis\": \"$basis\",
+      \"scf\": { \"max_iter\": 50, \"tol\": 1e-6 }
+    }"
+
+    # H2 dissociated
+    run_case "H2_3.0A" "$basis" "{
+      \"molecule\": {
+        \"charge\": 0,
+        \"atoms\": [
+          { \"element\": \"H\", \"position\": [0.0, 0.0, 0.0] },
+          { \"element\": \"H\", \"position\": [0.0, 0.0, 3.0] }
+        ]
+      },
+      \"basis\": \"$basis\",
+      \"scf\": { \"max_iter\": 50, \"tol\": 1e-6 }
+    }"
+
+    # HeH+
+    run_case "HeH_plus" "$basis" "{
+      \"molecule\": {
+        \"charge\": 1,
+        \"atoms\": [
+          { \"element\": \"He\", \"position\": [0.0, 0.0, 0.0] },
+          { \"element\": \"H\", \"position\": [0.0, 0.0, 1.4] }
+        ]
+      },
+      \"basis\": \"$basis\",
+      \"scf\": { \"max_iter\": 50, \"tol\": 1e-6 }
+    }"
+
+done
+
+echo "All runs completed. Results saved to $OUTPUT_FILE"

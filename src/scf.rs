@@ -61,10 +61,6 @@ fn fock_matrix(h: &Array2<f64>, d: &Array2<f64>, eri: &[f64]) -> Array2<f64> {
     let n = h.dim().0;
     let mut f = h.clone();
 
-    if n == 1 {
-        return f; // no electron-electron interaction
-    }
-
     for i in 0..n {
         for j in 0..n {
             let mut g = 0.0;
@@ -73,7 +69,6 @@ fn fock_matrix(h: &Array2<f64>, d: &Array2<f64>, eri: &[f64]) -> Array2<f64> {
                 for l in 0..n {
                     let coulomb = eri[i*n*n*n + j*n*n + k*n + l];
                     let exchange = eri[i*n*n*n + k*n*n + j*n + l];
-
                     g += d[[k, l]] * (coulomb - 0.5 * exchange);
                 }
             }
@@ -144,12 +139,17 @@ pub fn run_scf(
     let h_arr = vec_to_array(h);
 
     let mut d = Array2::<f64>::zeros((n, n));
-    let mut f = fock_matrix(&h_arr, &d, eri);
     let mut e_prev = 0.0;
 
     println!("iter     E_elec          ΔE");
 
     for iter in 0..max_iter {
+        let  f: Array2<f64>;
+        if n_elec == 1 {
+            f = h_arr.clone();
+        } else {
+            f = fock_matrix(&h_arr, &d, eri);
+        }
 
         let f_prime = s_inv_sqrt.t().dot(&f).dot(&s_inv_sqrt);
 
@@ -169,11 +169,10 @@ pub fn run_scf(
             break;
         }
         e_prev = e;
-        f = fock_matrix(&h_arr, &d, eri);
     }
 
     let e_elec = e_prev;
     let e_nuc: f64 = nuclear_repulsion(&nuclei);
 
-    println!("E_total = {} ", e_elec + e_nuc);
+    println!("E_nuc = {} \nE_elec = {} \nE_total = {}", e_nuc, e_elec, e_elec + e_nuc);
 }
