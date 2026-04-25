@@ -30,9 +30,13 @@ cargo build
 
 Edit `input.json` to configure the molecule, basis set, and SCF parameters:
 Important parameters
+
 basis:['sto-1g','sto-2g','sto-3g','sto-4g','sto-5g','sto-6g']
+
 element: ['H','He']
+
 Position: [x,y,z]
+
 Example
 ```json
 {
