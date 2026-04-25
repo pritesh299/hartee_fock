@@ -7,14 +7,9 @@ LOG_FILE="run.log"
 echo "case,basis,E_total" > $OUTPUT_FILE
 echo "Hartree-Fock Test Run" > $LOG_FILE
 
-# -----------------------------
-# Basis sets
-# -----------------------------
+
 BASIS_LIST=("sto-1g" "sto-2g" "sto-3g" "sto-4g" "sto-5g" "sto-6g")
 
-# -----------------------------
-# Run function
-# -----------------------------
 run_case () {
     name=$1
     basis=$2
@@ -38,9 +33,7 @@ run_case () {
     echo "$name,$basis,$energy" >> $OUTPUT_FILE
 }
 
-# -----------------------------
-# Systems
-# -----------------------------
+
 
 for basis in "${BASIS_LIST[@]}"; do
 
