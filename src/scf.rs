@@ -13,7 +13,6 @@ fn vec_to_array(v: &[Vec<f64>]) -> Array2<f64> {
 
 
 // S^{-1/2}
-
 fn s_invsqrt(s: &[Vec<f64>]) -> Array2<f64> {
     let s_arr = vec_to_array(s);
 
@@ -30,7 +29,6 @@ fn s_invsqrt(s: &[Vec<f64>]) -> Array2<f64> {
 }
 
 // Density matrix (supports odd electrons)
-
 fn density_matrix(c: &Array2<f64>, n_elec: usize) -> Array2<f64> {
     let (n, _) = c.dim();
     let n_occ = n_elec / 2;
@@ -59,10 +57,13 @@ fn density_matrix(c: &Array2<f64>, n_elec: usize) -> Array2<f64> {
 }
 
 // Fock matrix
-
 fn fock_matrix(h: &Array2<f64>, d: &Array2<f64>, eri: &[f64]) -> Array2<f64> {
     let n = h.dim().0;
     let mut f = h.clone();
+
+    if n == 1 {
+        return f; // no electron-electron interaction
+    }
 
     for i in 0..n {
         for j in 0..n {
@@ -100,7 +101,6 @@ fn electronic_energy(d: &Array2<f64>, h: &Array2<f64>, f: &Array2<f64>) -> f64 {
 }
 
 // Nuclear repulsion
-
 pub fn nuclear_repulsion(nuclei: &[([f64; 3], f64)]) -> f64 {
     let mut e = 0.0;
 
@@ -119,7 +119,6 @@ pub fn nuclear_repulsion(nuclei: &[([f64; 3], f64)]) -> f64 {
 }
 
 // SCF
-
 pub fn run_scf(
     s: &[Vec<f64>],
     h: &[Vec<f64>],
@@ -141,25 +140,25 @@ pub fn run_scf(
     .collect();
     let n = s.len();
 
-    let s_inv = s_invsqrt(s);
+    let s_inv_sqrt = s_invsqrt(s);
     let h_arr = vec_to_array(h);
 
     let mut d = Array2::<f64>::zeros((n, n));
+    let mut f = fock_matrix(&h_arr, &d, eri);
     let mut e_prev = 0.0;
 
     println!("iter     E_elec          ΔE");
 
     for iter in 0..max_iter {
-        let f = fock_matrix(&h_arr, &d, eri);
 
-        let f_prime = s_inv.t().dot(&f).dot(&s_inv);
+        let f_prime = s_inv_sqrt.t().dot(&f).dot(&s_inv_sqrt);
 
         let (_eps, c_prime) = f_prime.eigh(UPLO::Upper).unwrap();
 
-        let c = s_inv.dot(&c_prime);
+        let c = s_inv_sqrt.dot(&c_prime);
 
         d = density_matrix(&c, n_elec);
-
+        
         let e = electronic_energy(&d, &h_arr, &f);
         let delta = (e - e_prev).abs();
 
@@ -169,12 +168,12 @@ pub fn run_scf(
             println!("SCF converged\n");
             break;
         }
-
         e_prev = e;
+        f = fock_matrix(&h_arr, &d, eri);
     }
 
-    let e_elec = electronic_energy(&d, &h_arr, &fock_matrix(&h_arr, &d, eri));
-    let e_nuc = nuclear_repulsion(&nuclei);
+    let e_elec = e_prev;
+    let e_nuc: f64 = nuclear_repulsion(&nuclei);
 
-    println!("E_total = {}", e_elec + e_nuc);
+    println!("E_total = {} ", e_elec + e_nuc);
 }

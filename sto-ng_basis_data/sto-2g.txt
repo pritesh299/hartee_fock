@@ -1,0 +1,22 @@
+#----------------------------------------------------------------------
+# Basis Set Exchange
+# Version 0.12
+# https://www.basissetexchange.org
+#----------------------------------------------------------------------
+#   Basis set: STO-2G
+# Description: STO-2G Minimal Basis (2 functions/AO)
+#        Role: orbital
+#     Version: 1  (Data from Gaussian09)
+#----------------------------------------------------------------------
+
+
+BASIS "ao basis" SPHERICAL PRINT
+#BASIS SET: (2s) -> [1s]
+H    S
+      0.1309756377E+01       0.4301284983E+00
+      0.2331359749E+00       0.6789135305E+00
+#BASIS SET: (2s) -> [1s]
+He    S
+      0.2432879285E+01       0.4301284983E+00
+      0.4330512863E+00       0.6789135305E+00
+END

@@ -42,6 +42,9 @@ fn main() {
     let nuclear_attraction_matrix = integrals::compute_nuclear_attraction_matrix(&basis, &config.molecule.atoms);
     let eri_tensor = integrals::compute_eri_tensor(&basis);
     let hcore_matrix = integrals::hcore_matrix(basis.len(), &kinetic_matrix, &nuclear_attraction_matrix);
+    let n_elec: usize = config.molecule.atoms.iter()
+    .map(|a| integrals::nuclear_charge(&a.element) as usize)
+    .sum::<usize>() - config.molecule.charge as usize;
     
-    scf::run_scf(&overlap_matrix, &hcore_matrix, &eri_tensor, &config.molecule.atoms, config.molecule.atoms.len(), config.scf.max_iter, config.scf.tol);
+    scf::run_scf(&overlap_matrix, &hcore_matrix, &eri_tensor, &config.molecule.atoms, n_elec, config.scf.max_iter, config.scf.tol);
 }
